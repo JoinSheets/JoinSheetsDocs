@@ -1,6 +1,6 @@
 +++
 title = "Developer Docs"
-weight = 4
+weight = 5
 description = "Architecture, key decisions, testing, and how to contribute."
 +++
 
