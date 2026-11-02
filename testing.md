@@ -1,6 +1,6 @@
 +++
 title = "Testing"
-weight = 2
+weight = 3
 description = "The project's testing approach: unit tests, the smoke test, and (eventually) broader end-to-end coverage. How to check your change didn't break anything."
 +++
 

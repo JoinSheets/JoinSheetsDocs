@@ -1,6 +1,6 @@
 +++
 title = "Releases"
-weight = 3
+weight = 4
 description = "How JoinSheets versions, packages, and ships releases -- plus hotfixes and the nightly preview."
 +++
 

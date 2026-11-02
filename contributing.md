@@ -1,6 +1,6 @@
 +++
 title = "Contributing"
-weight = 4
+weight = 5
 description = "Issues, pull requests, and how to get involved."
 +++
 
