@@ -1,6 +1,6 @@
 +++
 title = "Releases"
-weight = 2
+weight = 3
 description = "How JoinSheets versions, packages, and ships releases -- plus hotfixes and the nightly preview."
 +++
 
@@ -60,6 +60,10 @@ Releases ship roughly every two weeks, on the 1st and the 15th of each month.
 JoinSheets is a small app with no build step and no external dependencies --
 there's no bundler, no build step, and no elaborate CI pipeline. Shipping a
 release is mostly a manual process.
+
+A change only ships in a release once the full test suite -- unit tests and
+the smoke test, see [Testing](../testing/) -- has been run and passes; that's
+the gate, not a CI job.
 
 The release process includes:
 

@@ -6,4 +6,5 @@ description = "Architecture, key decisions, testing, and how to contribute."
 
 Short, technical documentation for anyone working on JoinSheets itself (as
 opposed to using it). See [Architecture](./architecture/),
-[Releases](./releases/), and [Contributing](./contributing/).
+[Testing](./testing/), [Releases](./releases/), and
+[Contributing](./contributing/).

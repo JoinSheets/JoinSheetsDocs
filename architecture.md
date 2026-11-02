@@ -32,7 +32,7 @@ description = "Zero-build, vanilla JS, a Redux-style store, a lazy data format."
 ## Testing
 
 Pure-function modules (`dataset.js`, `entities.js`, `formula.js`, `export.js`,
-`store.js`) are covered by `node:test` unit tests. A separate smoke test
-(`tests/smoke/dom-smoke.js`) runs the real `<script>` bootstrap sequence
-against a minimal hand-rolled DOM stub, to catch wiring mistakes the unit
-tests can't see (a missing export, the wrong script order).
+`store.js`) are the reason this architecture keeps a hard line between logic
+and DOM-touching code: it's what makes them cleanly covered by `node:test`
+unit tests in the first place. See [Testing](../testing/) for how to actually
+run the suite.

@@ -1,6 +1,6 @@
 +++
 title = "Contributing"
-weight = 3
+weight = 4
 description = "How to propose a change."
 +++
 
@@ -9,6 +9,8 @@ description = "How to propose a change."
   branch off `develop`.
 - Propose a change via an issue, implement it in a branch, and open a pull
   request against `develop`.
+- Run the test suite before opening that pull request, and add tests for
+  whatever you changed — see [Testing](../testing/).
 
 See [Releases](../releases/) for versioning, the release archive/GitHub
 Release convention, hotfixes, and the nightly preview build.
