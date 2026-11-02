@@ -4,32 +4,73 @@ weight = 2
 description = "How JoinSheets versions, packages, and ships releases -- plus hotfixes and the nightly preview."
 +++
 
-JoinSheets is a zero-build static app: there's no bundler, no build step, and no
-CI pipeline. A release is a deliberate, manual act -- merging accumulated work
-into `main`, packaging it, and tagging it -- not something that happens on every
-push. This page describes how that works.
+This section describes the core principles behind JoinSheets' release policy
+and the workflow for shipping a new release.
 
-## Versioning
+## Development phase
 
-- Releases are tagged on a specific commit on `main` (the tag name is the
-  version string itself, e.g. `0.2.0b1`).
-- JoinSheets is currently in **beta**: version numbers continue the same
-  numbering the project used during its alpha phase, just with a `b` instead
-  of an `a` -- `0.1.0b1`, `0.2.0b1`, and so on.
-- Beta means small, incremental changes: UI/UX work, occasional new features,
-  no large architectural jumps.
+The project is currently in beta: the core functionality is settled, and work
+now is about polishing individual pieces based on what early users run into.
 
-## Branching
+During alpha, changes landed fast and somewhat chaotically, as new ideas or
+different ways to implement a feature came up, and releases were spontaneous
+-- driven by how fast development was moving and how much had changed.
 
-- `develop` is where day-to-day work happens. `main` is always a clean,
-  releasable snapshot -- no test suites or developer-only scripts, only what
-  the product itself needs to run.
-- A release is `develop` merged into `main`, with development-only files
-  (tests, the test runner, ...) deliberately left out of that merge.
+Beta means small, incremental changes -- mostly UI/UX polish and general
+user-experience improvements, occasionally a new feature or an improvement to
+an existing one, no large architectural jumps.
+
+## Branches
+
+Moving into beta required splitting branches apart -- separating the actual
+result of development (the code users get) from the artifacts of the process
+itself (scripts, tests, experimental/unstable/unfinished work).
+
+The project uses the following branches:
+
+- `develop` -- day-to-day work, where every change lands before a release.
+- `main` -- a clean branch holding only the current release, with no test
+  suites or developer-only scripts. Only the product itself and the material
+  needed to demonstrate it live here.
 - Larger changes land on `develop` through their own short-lived branches
   first; this isn't a hard rule without exceptions, but the default.
+- Small changes and hotfixes go in directly, so the development tree doesn't
+  grow more than it needs to.
 
-## What's in a release
+A release, then, is `develop` merged into `main`, with development-only
+artifacts (tests, the test runner, and so on) deliberately left out of that
+merge.
+
+## Release cadence
+
+Moving into beta made the project's changes more predictable and smaller in
+scope, and work on it more orderly. Small improvements happen almost
+continuously, but shipping every one of them as its own release would be
+excessive.
+
+At the project's current pace, a two-week interval works well -- enough time
+to accumulate changes worth a version bump, and roughly the length of a
+standard two-week sprint, which is usually enough to develop one or two new
+features.
+
+Releases ship roughly every two weeks, on the 1st and the 15th of each month.
+
+## Workflow
+
+JoinSheets is a small app with no build step and no external dependencies --
+there's no bundler, no build step, and no elaborate CI pipeline. Shipping a
+release is mostly a manual process.
+
+The release process includes:
+
+- running the full test suite,
+- preparing the release artifacts,
+- merging the accumulated changes into `main`,
+- tagging the release commit with its version number,
+- publishing it as a GitHub Release,
+- updating the JoinSheets organization's GitHub Pages site.
+
+## Release contents
 
 Every release commit on `main` adds one archive (`JoinSheets-<version>.tar.gz`)
 at the repository root -- a snapshot of the release's production files (code +
@@ -46,32 +87,37 @@ See [CHANGELOG.md](https://github.com/JoinSheets/JoinSheets/blob/main/CHANGELOG.
 for the actual list of changes, release by release, plus what's planned for
 the next one.
 
+## Versioning
+
+- Releases are tagged on a specific commit on `main` (the tag name is the
+  version string itself, e.g. `0.2.0b1`).
+- JoinSheets is currently in **beta**: version numbers continue the same
+  numbering the project used during its alpha phase, just with a `b` instead
+  of an `a` -- `0.1.0b1`, `0.2.0b1`, and so on.
+
 ## Hotfixes
 
 A small, low-risk, purely visual or behavioral fix found shortly after a
 release doesn't have to wait for the next scheduled one -- it can go directly
 onto `main` and get mirrored onto `develop` right away, so it isn't lost (or
 reintroduced) the next time `develop` merges in. This is a judgment call, not
-an automatic process: something that touches more than a few lines, or needs
-real testing, waits for the next regular release instead.
+an automatic one: something that touches more than a few lines, or needs real
+testing, waits for the next regular release instead.
 
-A hotfix like this doesn't necessarily get its own fresh archive and GitHub
-Release on the spot -- the packaged artifacts catch up at the next real
-release, which bundles everything accumulated since, hotfixes included.
+## Nightly build
 
-## Nightly preview
+At any given moment, two versions of the app exist side by side: the latest
+official release, available on `main` and published on the JoinSheets
+organization's page at
+[joinsheets.github.io](https://joinsheets.github.io/), and the current
+development version from `develop`, published at
+[`/nightly-demo/`](https://joinsheets.github.io/nightly-demo/).
 
-Separately from all of the above: [joinsheets.github.io](https://joinsheets.github.io/)'s
-own `build.sh` builds two things every time it runs -- the official site (with
-the live demo pinned to the latest release tag) and a second copy of the demo
-app built from `develop`'s current tip, published at
-[`/nightly-demo/`](https://joinsheets.github.io/nightly-demo/). It isn't linked
-from anywhere on the site and is excluded from search engines via
-`robots.txt` -- reachable by URL, not advertised.
+The development version can be unstable, but it's published on the
+organization's site too, as the "nightly build". It isn't linked from the
+site and is excluded from search engines via `robots.txt` -- reachable only
+by its direct URL.
 
-This isn't a release-prep step or a gate anything has to pass -- it's a
-day-to-day development tool, run whenever, release coming up or not. Its main
-value: it catches two kinds of problems a purely local preview can't --
-visual/UX issues that only become obvious once you actually look at the
-rendered page, and environment-specific behavior like GitHub Pages' own CDN
-caching, which a local Hugo server simply doesn't reproduce.
+The nightly build is published to GitHub Pages between releases, with no
+fixed schedule. It isn't a release-prep step -- it's a day-to-day development
+tool, triggered manually, whenever, release coming up or not.
