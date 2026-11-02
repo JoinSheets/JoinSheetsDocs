@@ -13,9 +13,7 @@ star on GitHub.
 The team is actively working on usability and the interface, and makes
 changes based on real user experience. The best contribution from a user is
 an issue: report whatever got in your way or felt inconvenient. Include the
-app's version -- right now that means checking `<meta name="version">` in
-the page source (View Page Source, or your browser's dev tools); there's no
-in-app display of it yet.
+app's version -- open the gear icon (Settings) and check **About**.
 
 ## For developers
 
