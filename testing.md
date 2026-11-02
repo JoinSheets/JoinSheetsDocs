@@ -1,13 +1,17 @@
 +++
 title = "Testing"
 weight = 2
-description = "Unit tests, the smoke test, and how to check your change didn't break anything before opening a pull request."
+description = "The project's testing approach: unit tests, the smoke test, and (eventually) broader end-to-end coverage. How to check your change didn't break anything."
 +++
 
-JoinSheets has no build step, no bundler, and no CI -- which means nothing
-runs your tests for you automatically. Running them yourself, before opening
-a pull request, is the whole safety net. This page covers what's there and
-how to run it.
+This page describes the project's testing approach, the main kinds of tests,
+and the tools behind them. Before opening a pull request, make sure your
+change didn't break anything.
+
+JoinSheets has no automated CI -- the full suite is run by hand before each
+release ships. Running it yourself before opening a pull request is good
+practice too: it's the minimum protection against a sudden break during a
+merge, or an implicit conflict nobody noticed.
 
 ## Unit tests
 
@@ -41,9 +45,9 @@ A second, separate check: `tests/smoke/dom-smoke.js`. It actually runs the
 dependency; just enough of `document`/`window`/`sessionStorage`/
 `requestAnimationFrame` for one boot-to-Table pass to run).
 
-It catches what the unit tests structurally can't: a forgotten export on
-`window.DS_APP`, the wrong `<script>` order in `index.html`, a broken lazy
-cross-module reference. Run it with:
+It catches what the unit tests structurally can't: a forgotten export, the
+wrong `<script>` order in `index.html`, a broken lazy cross-module
+reference. Run it with:
 
 ```bash
 node tests/smoke/dom-smoke.js                   # a regular boot -> Table
@@ -51,18 +55,21 @@ node tests/smoke/dom-smoke.js --simulate-crash   # recovery from the crash watch
 ```
 
 It isn't picked up by `node --test`/`run_tests.sh` -- the filename doesn't
-match their auto-discovery pattern, so it has to be run on its own, and it's
-easy to forget. It's also not a substitute for a real browser: if a change
-touches a DOM API the stub doesn't implement (a real `querySelector`,
-`CSSOM`, `getBoundingClientRect`, an actual click), this won't catch it --
-that still needs opening `index.html` by hand.
+match their auto-discovery pattern, so it has to be run on its own. It's also
+not a substitute for a real browser: if a change touches a DOM API the stub
+doesn't implement (a real `querySelector`, `CSSOM`, `getBoundingClientRect`,
+an actual click), this won't catch it -- that still needs manual, visual
+verification in a browser.
+
+Broadening this kind of testing -- covering more test cases, moving it
+closer to real end-to-end coverage -- is a planned future direction.
 
 ## Before opening a pull request
 
 1. Run `./run_tests.sh` -- all tests passing is the minimum bar.
 2. Run both `node tests/smoke/dom-smoke.js` modes.
-3. For anything touching the DOM/UI in a way the smoke stub can't reach,
-   open `index.html` in an actual browser and try it.
+3. For anything touching the DOM/UI that the smoke test doesn't check,
+   open `index.html` in a browser and verify it by hand and eye.
 4. Add tests for what you changed. A fix without a regression test, or a new
    piece of logic without coverage, isn't finished -- `preset.test.js` and
    `entities.test.js` are good examples of what thorough coverage looks like
@@ -71,5 +78,5 @@ that still needs opening `index.html` by hand.
 ## Tests and releases
 
 The full suite (both unit tests and the smoke test, in both modes) runs
-again, and has to pass, before any change ships in a release -- see
+before every release, and has to pass, before any change ships -- see
 [Releases](../releases/).
